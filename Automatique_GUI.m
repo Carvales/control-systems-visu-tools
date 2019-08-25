@@ -22,18 +22,18 @@ function varargout = Automatique_GUI(varargin)
 
 % Edit the above text to modify the response to help Automatique_GUI
 
-% Last Modified by GUIDE v2.5 24-Aug-2019 19:10:48
+% Last Modified by GUIDE v2.5 25-Aug-2019 13:55:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @Automatique_GUI_OpeningFcn, ...
-                   'gui_OutputFcn',  @Automatique_GUI_OutputFcn, ...
-                   'gui_LayoutFcn',  [], ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @Automatique_GUI_OpeningFcn, ...
+    'gui_OutputFcn',  @Automatique_GUI_OutputFcn, ...
+    'gui_LayoutFcn',  [], ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-   gui_State.gui_Callback = str2func(varargin{1});
+    gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
@@ -55,8 +55,8 @@ function Automatique_GUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % K=str2num(handles.const_k.String);
 % z=str2num(handles.const_z.String);
 % wn=str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]); 
-% handles.axe1=stepplot(handles.system_function);
+% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
+% handles.graphique=stepplot(handles.system_function);
 handles = update_figure(handles);
 
 % Choose default command line output for Automatique_GUI
@@ -88,8 +88,8 @@ function const_k_Callback(hObject, eventdata, handles)
 K=str2num(handles.const_k.String);
 % z=str2num(handles.const_z.String);
 % wn=str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]); 
-% handles.axe1=stepplot(handles.system_function);
+% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
+% handles.graphique=stepplot(handles.system_function);
 handles = update_figure(handles);
 handles.text_k.String = K;
 % Hints: get(hObject,'String') returns contents of const_k as text
@@ -117,8 +117,8 @@ function const_z_Callback(hObject, eventdata, handles)
 % K=str2num(handles.const_k.String);
 % z=str2num(handles.const_z.String);
 % wn=str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]); 
-% handles.axe1=stepplot(handles.system_function);
+% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
+% handles.graphique=stepplot(handles.system_function);
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of const_z as text
 %        str2double(get(hObject,'String')) returns contents of const_z as a double
@@ -142,6 +142,7 @@ function Td_value_Callback(hObject, eventdata, handles)
 % hObject    handle to Td_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles.td_val.String = num2str(hObject.Value);
 handles = update_figure(handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -164,6 +165,7 @@ function Ti_value_Callback(hObject, eventdata, handles)
 % hObject    handle to Ti_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles.ti_val.String = num2str(hObject.Value);
 handles = update_figure(handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -189,17 +191,17 @@ function Kd_value_Callback(hObject, eventdata, handles)
 % Kd = (handles.Kd_value.Value);
 % Ti = (handles.Ti_value.Value);
 % Td = (handles.Td_value.Value);
-% 
+%
 % K = str2num(handles.const_k.String);
 % z = str2num(handles.const_z.String);
 % wn = str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]); 
-% % handles.axe1=stepplot(handles.system_function);
-% 
+% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
+% % handles.graphique=stepplot(handles.system_function);
+%
 % % PID=Kd*tf([Ti*Td Ti 1],[Ti 1]);
 % PID=Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
 % CL=feedback(PID*handles.system_function,1);
-% handles.axe1=stepplot(CL);
+% handles.graphique=stepplot(CL);
 
 handles.kd_val.String = num2str(hObject.Value);
 handles = update_figure(handles);
@@ -252,22 +254,30 @@ z = str2num(handles.const_z.String);
 wn = str2num(handles.const_wn.String);
 
 if handles.P_correcteur.Value==0 && handles.PI_correcteur.Value==0 && handles.PID_correcteur.Value==0
-    handles.system_function = tf(K,[1/wn^2 2*z/wn 1]); 
-    handles.axe1=stepplot(handles.system_function);
+    handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
+    handles.reponse_echelon=stepplot(handles.system_function);
+%     p=getoptions(handles.reponse_echelon);
+%     p.Title.String = 'Réponse du système à un échelon';
 else
-
-if handles.P_correcteur.Value==1
-    PID = Kd;
-end
-if handles.PI_correcteur.Value==1
-    Td = 0;
-    PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
-end
-if handles.PID_correcteur.Value==1
-    PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
-end
-CL=feedback(PID*handles.system_function,1);
-handles.axe1=stepplot(CL);
+    
+    if handles.P_correcteur.Value==1
+        PID = Kd;
+    end
+    if handles.PI_correcteur.Value==1
+        Td = 0;
+        PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
+    end
+    if handles.PID_correcteur.Value==1
+        PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
+    end
+    CL=feedback(PID*handles.system_function,1);
+    handles.reponse_echelon=stepplot(CL);
+    handles.graphique.Title.String ='Réponse du système en boucle fermée';
+    
+    p=getoptions(handles.reponse_echelon);
+    p.Title.String = 'Test';
+ 
+   
 end
 
 
@@ -276,6 +286,9 @@ function P_correcteur_Callback(hObject, eventdata, handles)
 % hObject    handle to P_correcteur (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+handles.PI_correcteur.Value = 0;
+handles.PID_correcteur.Value = 0;
 handles = update_figure(handles);
 % Hint: get(hObject,'Value') returns toggle state of P_correcteur
 
@@ -285,6 +298,8 @@ function PI_correcteur_Callback(hObject, eventdata, handles)
 % hObject    handle to PI_correcteur (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles.P_correcteur.Value = 0;
+handles.PID_correcteur.Value = 0;
 handles = update_figure(handles);
 % Hint: get(hObject,'Value') returns toggle state of PI_correcteur
 
@@ -293,7 +308,9 @@ handles = update_figure(handles);
 function PID_correcteur_Callback(hObject, eventdata, handles)
 % hObject    handle to PID_correcteur (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% hahandles.PI_correcteur.Value = 0;
+handles.P_correcteur.Value = 0;
+handles.PI_correcteur.Value = 0;
 handles = update_figure(handles);
 % Hint: get(hObject,'Value') returns toggle state of PID_correcteur
 
@@ -303,8 +320,12 @@ function kd_val_Callback(hObject, eventdata, handles)
 % hObject    handle to kd_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-handles.Kd_value.Value = str2num(hObject.String);
+value = str2num(hObject.String);
+if(isempty(value))
+    value= 0;
+    hObject.String = '0';
+end
+handles.Kd_value.Value = value;
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of kd_val as text
 %        str2double(get(hObject,'String')) returns contents of kd_val as a double
@@ -313,6 +334,64 @@ handles = update_figure(handles);
 % --- Executes during object creation, after setting all properties.
 function kd_val_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to kd_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function graphique_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to graphique (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate graphique
+
+
+
+function ti_val_Callback(hObject, eventdata, handles)
+% hObject    handle to ti_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+handles.Ti_value.Value = str2num(hObject.String);
+handles = update_figure(handles);
+% Hints: get(hObject,'String') returns contents of ti_val as text
+%        str2double(get(hObject,'String')) returns contents of ti_val as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ti_val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ti_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function td_val_Callback(hObject, eventdata, handles)
+% hObject    handle to td_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.Td_value.Value = str2num(hObject.String);
+handles = update_figure(handles);
+% Hints: get(hObject,'String') returns contents of td_val as text
+%        str2double(get(hObject,'String')) returns contents of td_val as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function td_val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to td_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
