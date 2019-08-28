@@ -52,11 +52,7 @@ function Automatique_GUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   unrecognized PropertyName/PropertyValue pairs from the
 %            command line (see VARARGIN)
-% K=str2num(handles.const_k.String);
-% z=str2num(handles.const_z.String);
-% wn=str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
-% handles.graphique=stepplot(handles.system_function);
+
 handles = update_figure(handles);
 
 % Choose default command line output for Automatique_GUI
@@ -85,13 +81,14 @@ function const_k_Callback(hObject, eventdata, handles)
 % hObject    handle to const_k (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-K=str2num(handles.const_k.String);
-% z=str2num(handles.const_z.String);
-% wn=str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
-% handles.graphique=stepplot(handles.system_function);
+value = str2num(hObject.String);
+if(isempty(value))
+    value = 1;
+end
+
+hObject.String = num2str(value);
 handles = update_figure(handles);
-handles.text_k.String = K;
+
 % Hints: get(hObject,'String') returns contents of const_k as text
 %        str2double(get(hObject,'String')) returns contents of const_k as a double
 
@@ -114,11 +111,12 @@ function const_z_Callback(hObject, eventdata, handles)
 % hObject    handle to const_z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% K=str2num(handles.const_k.String);
-% z=str2num(handles.const_z.String);
-% wn=str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
-% handles.graphique=stepplot(handles.system_function);
+value = str2num(hObject.String);
+if(isempty(value))
+    value = 1;
+end
+
+hObject.String = num2str(value);
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of const_z as text
 %        str2double(get(hObject,'String')) returns contents of const_z as a double
@@ -188,20 +186,7 @@ function Kd_value_Callback(hObject, eventdata, handles)
 % hObject    handle to Kd_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% Kd = (handles.Kd_value.Value);
-% Ti = (handles.Ti_value.Value);
-% Td = (handles.Td_value.Value);
-%
-% K = str2num(handles.const_k.String);
-% z = str2num(handles.const_z.String);
-% wn = str2num(handles.const_wn.String);
-% handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
-% % handles.graphique=stepplot(handles.system_function);
-%
-% % PID=Kd*tf([Ti*Td Ti 1],[Ti 1]);
-% PID=Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
-% CL=feedback(PID*handles.system_function,1);
-% handles.graphique=stepplot(CL);
+
 
 handles.kd_val.String = num2str(hObject.Value);
 handles = update_figure(handles);
@@ -227,6 +212,12 @@ function const_wn_Callback(hObject, eventdata, handles)
 % hObject    handle to const_wn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+value = str2num(hObject.String);
+if(isempty(value))
+    value = 1;
+end
+
+hObject.String = num2str(value);
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of const_wn as text
 %        str2double(get(hObject,'String')) returns contents of const_wn as a double
@@ -253,11 +244,14 @@ K = str2num(handles.const_k.String);
 z = str2num(handles.const_z.String);
 wn = str2num(handles.const_wn.String);
 
+
 if handles.P_correcteur.Value==0 && handles.PI_correcteur.Value==0 && handles.PID_correcteur.Value==0
     handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
-    handles.reponse_echelon=stepplot(handles.system_function);
-%     p=getoptions(handles.reponse_echelon);
-%     p.Title.String = 'Réponse du système à un échelon';
+    h = stepplot(handles.system_function);
+    p = getoptions(h);
+    p.XLabel.String = 'Temps';
+    p.SettleTimeThreshold = 0.05;
+    p.Title.String = 'Réponse indicielle du système';
 else
     
     if handles.P_correcteur.Value==1
@@ -270,16 +264,16 @@ else
     if handles.PID_correcteur.Value==1
         PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
     end
-    CL=feedback(PID*handles.system_function,1);
-    handles.reponse_echelon=stepplot(CL);
-    handles.graphique.Title.String ='Réponse du système en boucle fermée';
     
-    p=getoptions(handles.reponse_echelon);
-    p.Title.String = 'Test';
- 
-   
+    CL = feedback(PID*handles.system_function,1);
+    h = stepplot(CL);
+    p = getoptions(h);
+    p.XLabel.String = 'Temps';
+    p.SettleTimeThreshold = 0.05;
+    p.Title.String = 'Réponse indicielle du système en boucle fermée';
 end
-
+    setoptions(h,p)
+    h.showCharacteristic('SettlingTime')
 
 % --- Executes on button press in P_correcteur.
 function P_correcteur_Callback(hObject, eventdata, handles)
@@ -301,6 +295,7 @@ function PI_correcteur_Callback(hObject, eventdata, handles)
 handles.P_correcteur.Value = 0;
 handles.PID_correcteur.Value = 0;
 handles = update_figure(handles);
+
 % Hint: get(hObject,'Value') returns toggle state of PI_correcteur
 
 
@@ -322,9 +317,15 @@ function kd_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 value = str2num(hObject.String);
 if(isempty(value))
-    value= 0;
+    value = 0;
     hObject.String = '0';
 end
+if value <0
+    value = 0;
+elseif value >100
+    value = 100;
+end
+hObject.String = num2str(value);
 handles.Kd_value.Value = value;
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of kd_val as text
@@ -358,8 +359,18 @@ function ti_val_Callback(hObject, eventdata, handles)
 % hObject    handle to ti_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-handles.Ti_value.Value = str2num(hObject.String);
+value = str2num(hObject.String);
+if(isempty(value))
+    value = 1;
+    hObject.String = '1';
+end
+if value <1
+    value = 1;
+elseif value >100
+    value = 100;
+end
+hObject.String = num2str(value);
+handles.Ti_value.Value = value;
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of ti_val as text
 %        str2double(get(hObject,'String')) returns contents of ti_val as a double
@@ -383,7 +394,20 @@ function td_val_Callback(hObject, eventdata, handles)
 % hObject    handle to td_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.Td_value.Value = str2num(hObject.String);
+value = str2num(hObject.String);
+
+if(isempty(value))
+    value = 1;
+    hObject.String = '1';
+end
+
+if value <1
+    value = 1;
+elseif value >100
+    value = 100;
+end
+hObject.String = num2str(value);
+handles.Td_value.Value = value;
 handles = update_figure(handles);
 % Hints: get(hObject,'String') returns contents of td_val as text
 %        str2double(get(hObject,'String')) returns contents of td_val as a double
