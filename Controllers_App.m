@@ -1,18 +1,18 @@
-function varargout = Automatique_GUI(varargin)
-%AUTOMATIQUE_GUI MATLAB code file for Automatique_GUI.fig
-%      AUTOMATIQUE_GUI, by itself, creates a new AUTOMATIQUE_GUI or raises the existing
+function varargout = Controllers_App(varargin)
+%CONTROLLERS_APP MATLAB code file for Controllers_App.fig
+%      CONTROLLERS_APP, by itself, creates a new CONTROLLERS_APP or raises the existing
 %      singleton*.
 %
-%      H = AUTOMATIQUE_GUI returns the handle to a new AUTOMATIQUE_GUI or the handle to
+%      H = CONTROLLERS_APP returns the handle to a new CONTROLLERS_APP or the handle to
 %      the existing singleton*.
 %
-%      AUTOMATIQUE_GUI('Property','Value',...) creates a new AUTOMATIQUE_GUI using the
+%      CONTROLLERS_APP('Property','Value',...) creates a new CONTROLLERS_APP using the
 %      given property value pairs. Unrecognized properties are passed via
-%      varargin to Automatique_GUI_OpeningFcn.  This calling syntax produces a
+%      varargin to Controllers_App_OpeningFcn.  This calling syntax produces a
 %      warning when there is an existing singleton*.
 %
-%      AUTOMATIQUE_GUI('CALLBACK') and AUTOMATIQUE_GUI('CALLBACK',hObject,...) call the
-%      local function named CALLBACK in AUTOMATIQUE_GUI.M with the given input
+%      CONTROLLERS_APP('CALLBACK') and CONTROLLERS_APP('CALLBACK',hObject,...) call the
+%      local function named CALLBACK in CONTROLLERS_APP.M with the given input
 %      arguments.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
@@ -20,16 +20,16 @@ function varargout = Automatique_GUI(varargin)
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help Automatique_GUI
+% Edit the above text to modify the response to help Controllers_App
 
-% Last Modified by GUIDE v2.5 25-Aug-2019 13:55:32
+% Last Modified by GUIDE v2.5 29-Aug-2019 15:59:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
     'gui_Singleton',  gui_Singleton, ...
-    'gui_OpeningFcn', @Automatique_GUI_OpeningFcn, ...
-    'gui_OutputFcn',  @Automatique_GUI_OutputFcn, ...
+    'gui_OpeningFcn', @Controllers_App_OpeningFcn, ...
+    'gui_OutputFcn',  @Controllers_App_OutputFcn, ...
     'gui_LayoutFcn',  [], ...
     'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,8 +44,8 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before Automatique_GUI is made visible.
-function Automatique_GUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before Controllers_App is made visible.
+function Controllers_App_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -55,18 +55,18 @@ function Automatique_GUI_OpeningFcn(hObject, eventdata, handles, varargin)
 
 handles = update_figure(handles);
 
-% Choose default command line output for Automatique_GUI
+% Choose default command line output for Controllers_App
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes Automatique_GUI wait for user response (see UIRESUME)
+% UIWAIT makes Controllers_App wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = Automatique_GUI_OutputFcn(hObject, eventdata, handles)
+function varargout = Controllers_App_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -272,8 +272,10 @@ else
     p.SettleTimeThreshold = 0.05;
     p.Title.String = 'Réponse indicielle du système en boucle fermée';
 end
+    p.Grid = 'on';
     setoptions(h,p)
     h.showCharacteristic('SettlingTime')
+    
 
 % --- Executes on button press in P_correcteur.
 function P_correcteur_Callback(hObject, eventdata, handles)
