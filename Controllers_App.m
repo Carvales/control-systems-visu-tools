@@ -22,7 +22,7 @@ function varargout = Controllers_App(varargin)
 
 % Edit the above text to modify the response to help Controllers_App
 
-% Last Modified by GUIDE v2.5 29-Aug-2019 15:59:41
+% Last Modified by GUIDE v2.5 25-Oct-2019 20:10:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -111,16 +111,14 @@ function const_z_Callback(hObject, eventdata, handles)
 % hObject    handle to const_z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2num(hObject.String);
+value = str2double(get(hObject,'String'));
 if(isempty(value))
     value = 1;
 end
 
 hObject.String = num2str(value);
 handles = update_figure(handles);
-% Hints: get(hObject,'String') returns contents of const_z as text
-%        str2double(get(hObject,'String')) returns contents of const_z as a double
-
+guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function const_z_CreateFcn(hObject, eventdata, handles)
@@ -140,10 +138,13 @@ function Td_value_Callback(hObject, eventdata, handles)
 % hObject    handle to Td_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.td_val.String = num2str(hObject.Value);
+handles = guidata(hObject);
+
+set(handles.td_val,'String',num2str(get(hObject,'Value')));
+
 handles = update_figure(handles);
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -151,7 +152,7 @@ function Td_value_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Td_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-
+%addlistener(hObject, 'ContinuousValueChange', @(hObject, eventdata) Td_value_CreateFcn(hObject, eventdata, handles));
 % Hint: slider controls usually have a light gray background.
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
@@ -163,10 +164,12 @@ function Ti_value_Callback(hObject, eventdata, handles)
 % hObject    handle to Ti_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.ti_val.String = num2str(hObject.Value);
+handles = guidata(hObject);
+
+set(handles.ti_val,'String',num2str(get(hObject,'Value')));
 handles = update_figure(handles);
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -174,7 +177,7 @@ function Ti_value_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Ti_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-
+addlistener(hObject, 'ContinuousValueChange', @(hObject, eventdata) Ti_value_Callback(hObject, eventdata, handles));
 % Hint: slider controls usually have a light gray background.
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
@@ -186,13 +189,12 @@ function Kd_value_Callback(hObject, eventdata, handles)
 % hObject    handle to Kd_value (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles = guidata(hObject);
 
-
-handles.kd_val.String = num2str(hObject.Value);
+set(handles.kd_val,'String',num2str(get(hObject,'Value')));
 handles = update_figure(handles);
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -201,6 +203,7 @@ function Kd_value_CreateFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
+addlistener(hObject, 'ContinuousValueChange', @(hObject, eventdata) Kd_value_Callback(hObject, eventdata, handles));
 % Hint: slider controls usually have a light gray background.
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
@@ -212,15 +215,14 @@ function const_wn_Callback(hObject, eventdata, handles)
 % hObject    handle to const_wn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2num(hObject.String);
+value = str2double(get(hObject,'String'));
 if(isempty(value))
     value = 1;
 end
 
 hObject.String = num2str(value);
 handles = update_figure(handles);
-% Hints: get(hObject,'String') returns contents of const_wn as text
-%        str2double(get(hObject,'String')) returns contents of const_wn as a double
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -235,46 +237,57 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+
 function handles = update_figure(handles)
-Kd = (handles.Kd_value.Value);
-Ti = (handles.Ti_value.Value);
-Td = (handles.Td_value.Value);
 
-K = str2num(handles.const_k.String);
-z = str2num(handles.const_z.String);
-wn = str2num(handles.const_wn.String);
+Kd = get(handles.Kd_value,'Value');
+Ti = get(handles.Ti_value,'Value');
+Td = get(handles.Td_value,'Value');
 
+K = str2double(get(handles.const_k,'String'));
+z = str2double(get(handles.const_z,'String'));
+wn = str2double(get(handles.const_wn,'String'));
 
-if handles.P_correcteur.Value==0 && handles.PI_correcteur.Value==0 && handles.PID_correcteur.Value==0
+p_bool = get(handles.P_correcteur,'Value');
+pi_bool = get(handles.PI_correcteur,'Value');
+pid_bool = get(handles.PID_correcteur,'Value');
+
+if ~p_bool && ~pi_bool && ~pid_bool
     handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
-    h = stepplot(handles.system_function);
+    h = stepplot(handles.graphique,handles.system_function);
     p = getoptions(h);
     p.XLabel.String = 'Temps';
     p.SettleTimeThreshold = 0.05;
     p.Title.String = 'Réponse indicielle du système';
+    all_info = stepinfo(handles.system_function,'SettleTimeThreshold',0.05);
 else
     
-    if handles.P_correcteur.Value==1
+    if p_bool
         PID = Kd;
-    end
-    if handles.PI_correcteur.Value==1
+    elseif pi_bool
         Td = 0;
         PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
-    end
-    if handles.PID_correcteur.Value==1
+    elseif pid_bool
         PID = Kd*tf([Ti*Td Ti+Td 1],[Ti 0]);
     end
     
     CL = feedback(PID*handles.system_function,1);
-    h = stepplot(CL);
+    h = stepplot(handles.graphique,CL);
     p = getoptions(h);
     p.XLabel.String = 'Temps';
     p.SettleTimeThreshold = 0.05;
     p.Title.String = 'Réponse indicielle du système en boucle fermée';
+    all_info = stepinfo(CL,'SettleTimeThreshold',0.05);
+    set(handles.err_txt,'String','A def');
+    set(handles.dep_txt,'String',all_info.Overshoot);
+    
 end
     p.Grid = 'on';
     setoptions(h,p)
     h.showCharacteristic('SettlingTime')
+    set(handles.tr5_txt,'String',all_info.SettlingTime);
+
+
     
 
 % --- Executes on button press in P_correcteur.
@@ -283,9 +296,28 @@ function P_correcteur_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-handles.PI_correcteur.Value = 0;
-handles.PID_correcteur.Value = 0;
+if ~get(handles.P_correcteur,'Value')
+    set(handles.Kd_value,'Enable','off');
+    set(handles.Ti_value,'Enable','off');
+    set(handles.Td_value,'Enable','off');
+        set(handles.kd_val,'Enable','off')
+    set(handles.ti_val,'Enable','off')
+    set(handles.td_val,'Enable','off')
+else
+
+set(handles.PI_correcteur,'Value',0);
+set(handles.PID_correcteur,'Value',0);
+
+set(handles.Kd_value,'Enable','on');
+set(handles.Ti_value,'Enable','off');
+set(handles.Td_value,'Enable','off');
+set(handles.kd_val,'Enable','on')
+set(handles.ti_val,'Enable','off')
+set(handles.td_val,'Enable','off')
+end
+
 handles = update_figure(handles);
+guidata(hObject, handles);
 % Hint: get(hObject,'Value') returns toggle state of P_correcteur
 
 
@@ -294,11 +326,31 @@ function PI_correcteur_Callback(hObject, eventdata, handles)
 % hObject    handle to PI_correcteur (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.P_correcteur.Value = 0;
-handles.PID_correcteur.Value = 0;
+
+if ~get(handles.PI_correcteur,'Value')
+    set(handles.Kd_value,'Enable','off');
+    set(handles.Ti_value,'Enable','off');
+    set(handles.Td_value,'Enable','off');
+        set(handles.kd_val,'Enable','off')
+    set(handles.ti_val,'Enable','off')
+    set(handles.td_val,'Enable','off')
+else
+
+set(handles.P_correcteur,'Value',0);
+set(handles.PID_correcteur,'Value',0);
+set(handles.Kd_value,'Enable','on');
+
+set(handles.Kd_value,'Enable','on');
+set(handles.Ti_value,'Enable','on');
+set(handles.Td_value,'Enable','off');
+
+set(handles.kd_val,'Enable','on')
+set(handles.ti_val,'Enable','on')
+set(handles.td_val,'Enable','off')
+end
 handles = update_figure(handles);
 
-% Hint: get(hObject,'Value') returns toggle state of PI_correcteur
+guidata(hObject, handles);
 
 
 % --- Executes on button press in PID_correcteur.
@@ -306,18 +358,36 @@ function PID_correcteur_Callback(hObject, eventdata, handles)
 % hObject    handle to PID_correcteur (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % hahandles.PI_correcteur.Value = 0;
-handles.P_correcteur.Value = 0;
-handles.PI_correcteur.Value = 0;
-handles = update_figure(handles);
-% Hint: get(hObject,'Value') returns toggle state of PID_correcteur
 
+if ~get(handles.PID_correcteur,'Value')
+    set(handles.Kd_value,'Enable','off');
+    set(handles.Ti_value,'Enable','off');
+    set(handles.Td_value,'Enable','off');
+    set(handles.kd_val,'Enable','off')
+    set(handles.ti_val,'Enable','off')
+    set(handles.td_val,'Enable','off')
+else
+
+set(handles.P_correcteur,'Value',0);
+set(handles.PI_correcteur,'Value',0);
+
+set(handles.Kd_value,'Enable','on');
+set(handles.Ti_value,'Enable','on');
+set(handles.Td_value,'Enable','on');
+set(handles.kd_val,'Enable','on')
+set(handles.ti_val,'Enable','on')
+set(handles.td_val,'Enable','on')
+end
+handles = update_figure(handles);
+
+guidata(hObject, handles);
 
 
 function kd_val_Callback(hObject, eventdata, handles)
 % hObject    handle to kd_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2num(hObject.String);
+value = str2double(get(hObject,'String'));
 if(isempty(value))
     value = 0;
     hObject.String = '0';
@@ -327,11 +397,11 @@ if value <0
 elseif value >100
     value = 100;
 end
-hObject.String = num2str(value);
-handles.Kd_value.Value = value;
+set(hObject,'String', num2str(value));
+set(handles.Kd_value,'Value',value);
 handles = update_figure(handles);
-% Hints: get(hObject,'String') returns contents of kd_val as text
-%        str2double(get(hObject,'String')) returns contents of kd_val as a double
+
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -361,7 +431,7 @@ function ti_val_Callback(hObject, eventdata, handles)
 % hObject    handle to ti_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2num(hObject.String);
+value = str2double(get(hObject,'String'));
 if(isempty(value))
     value = 1;
     hObject.String = '1';
@@ -371,11 +441,10 @@ if value <1
 elseif value >100
     value = 100;
 end
-hObject.String = num2str(value);
-handles.Ti_value.Value = value;
+set(hObject,'String', num2str(value));
+set(handles.Ti_value,'Value',value);
 handles = update_figure(handles);
-% Hints: get(hObject,'String') returns contents of ti_val as text
-%        str2double(get(hObject,'String')) returns contents of ti_val as a double
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -396,7 +465,7 @@ function td_val_Callback(hObject, eventdata, handles)
 % hObject    handle to td_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2num(hObject.String);
+value = str2double(get(hObject,'String'));
 
 if(isempty(value))
     value = 1;
@@ -408,16 +477,84 @@ if value <1
 elseif value >100
     value = 100;
 end
-hObject.String = num2str(value);
-handles.Td_value.Value = value;
+set(hObject,'String', num2str(value));
+set(handles.Td_value,'Value', value);
 handles = update_figure(handles);
-% Hints: get(hObject,'String') returns contents of td_val as text
-%        str2double(get(hObject,'String')) returns contents of td_val as a double
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
 function td_val_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to td_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function tr5_txt_Callback(hObject, eventdata, handles)
+% hObject    handle to tr5_txt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tr5_txt as text
+%        str2double(get(hObject,'String')) returns contents of tr5_txt as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tr5_txt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tr5_txt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function err_txt_Callback(hObject, eventdata, handles)
+% hObject    handle to err_txt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of err_txt as text
+%        str2double(get(hObject,'String')) returns contents of err_txt as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function err_txt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to err_txt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function dep_txt_Callback(hObject, eventdata, handles)
+% hObject    handle to dep_txt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of dep_txt as text
+%        str2double(get(hObject,'String')) returns contents of dep_txt as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function dep_txt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to dep_txt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
