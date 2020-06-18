@@ -22,7 +22,7 @@ function varargout = Controllers_App(varargin)
 
 % Edit the above text to modify the response to help Controllers_App
 
-% Last Modified by GUIDE v2.5 25-Oct-2019 20:10:41
+% Last Modified by GUIDE v2.5 18-Jun-2020 17:37:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -140,7 +140,7 @@ function Td_value_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = guidata(hObject);
 
-set(handles.td_val,'String',num2str(get(hObject,'Value')));
+set(handles.td_val,'String',num2str(round(get(hObject,'Value'),2)));
 
 handles = update_figure(handles);
 
@@ -166,7 +166,7 @@ function Ti_value_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = guidata(hObject);
 
-set(handles.ti_val,'String',num2str(get(hObject,'Value')));
+set(handles.ti_val,'String',num2str(round(get(hObject,'Value'),2)));
 handles = update_figure(handles);
 
 guidata(hObject, handles);
@@ -191,7 +191,7 @@ function Kd_value_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = guidata(hObject);
 
-set(handles.kd_val,'String',num2str(get(hObject,'Value')));
+set(handles.kd_val,'String',num2str(round(get(hObject,'Value'),2)));
 handles = update_figure(handles);
 
 guidata(hObject, handles);
@@ -252,8 +252,15 @@ p_bool = get(handles.P_correcteur,'Value');
 pi_bool = get(handles.PI_correcteur,'Value');
 pid_bool = get(handles.PID_correcteur,'Value');
 
-if ~p_bool && ~pi_bool && ~pid_bool
+if get(handles.popupmenu1,'Value') == 1
+    handles.system_function = tf(K,[1 z]);
+elseif get(handles.popupmenu1,'Value') == 2
     handles.system_function = tf(K,[1/wn^2 2*z/wn 1]);
+else
+    print('Je devrais pas arriver là!')
+end
+    
+if ~p_bool && ~pi_bool && ~pid_bool
     h = stepplot(handles.graphique,handles.system_function);
     p = getoptions(h);
     p.XLabel.String = 'Temps';
@@ -277,15 +284,15 @@ else
     p.XLabel.String = 'Temps';
     p.SettleTimeThreshold = 0.05;
     p.Title.String = 'Réponse indicielle du système en boucle fermée';
-    all_info = stepinfo(CL,'SettleTimeThreshold',0.05);
-    set(handles.err_txt,'String','A def');
-    set(handles.dep_txt,'String',all_info.Overshoot);
+    all_info = stepinfo(CL,'SettleTimeThreshold', 0.05);
+    set(handles.err_txt,'String',round(abs(h.Responses.Data.Amplitude(end)-1), 2));
+    set(handles.dep_txt,'String',round(all_info.Overshoot, 1));
     
 end
     p.Grid = 'on';
     setoptions(h,p)
     h.showCharacteristic('SettlingTime')
-    set(handles.tr5_txt,'String',all_info.SettlingTime);
+    set(handles.tr5_txt,'String',round(all_info.SettlingTime, 2));
 
 
     
@@ -300,7 +307,7 @@ if ~get(handles.P_correcteur,'Value')
     set(handles.Kd_value,'Enable','off');
     set(handles.Ti_value,'Enable','off');
     set(handles.Td_value,'Enable','off');
-        set(handles.kd_val,'Enable','off')
+    set(handles.kd_val,'Enable','off')
     set(handles.ti_val,'Enable','off')
     set(handles.td_val,'Enable','off')
 else
@@ -387,7 +394,7 @@ function kd_val_Callback(hObject, eventdata, handles)
 % hObject    handle to kd_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2double(get(hObject,'String'));
+value = round(str2double(get(hObject,'String')),2);
 if(isempty(value))
     value = 0;
     hObject.String = '0';
@@ -431,7 +438,7 @@ function ti_val_Callback(hObject, eventdata, handles)
 % hObject    handle to ti_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2double(get(hObject,'String'));
+value = round(str2double(get(hObject,'String')),2);
 if(isempty(value))
     value = 1;
     hObject.String = '1';
@@ -465,7 +472,7 @@ function td_val_Callback(hObject, eventdata, handles)
 % hObject    handle to td_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-value = str2double(get(hObject,'String'));
+value = round(str2double(get(hObject,'String')),2);
 
 if(isempty(value))
     value = 1;
@@ -563,3 +570,48 @@ function dep_txt_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu1
+handles = guidata(hObject);
+
+if get(hObject,'Value') == 1  
+	set(handles.text7,'Visible', 'off'); 
+    set(handles.const_wn,'Visible', 'off');
+    set(handles.text6, 'String', 'Constante                de temps')
+    set(handles.panel_1,'Visible', 'on');
+    set(handles.panel_2,'Visible', 'off');
+else
+    set(handles.text7,'Visible', 'on');
+    set(handles.const_wn,'Visible', 'on');
+    set(handles.text6, 'String', 'Coefficient d''amortissement')
+    set(handles.panel_1,'Visible', 'off');
+    set(handles.panel_2,'Visible', 'on');
+end
+handles = update_figure(handles);
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+set(hObject,'Value',2)
+
+
+
+
+
