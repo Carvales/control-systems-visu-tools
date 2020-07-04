@@ -9,13 +9,17 @@ I propose matlab applications to visualize and understand systems.
 ## Available tools:
 
 - Desgin and Visualisation of PID Regulator
+  * New version : PID_visu.mlapp
+  * Old version : Controllers_App
+
 - Visualization and control of an Inverted Pendulum
+  * Inverted_pendulum.mlapp
 
 Note : Available tools are functional but can still evolve (add features, bug corrections, etc.)
 
 ## Tools planned:
 - Pole placement visualization
-- Visualization and control of a water tank
+- Visualisation and control of a water tank
 
 ### Prerequisites
 Matlab R2016b or above to be able to run apps !
@@ -25,13 +29,14 @@ Matlab R2016b or above to be able to run apps !
 1) Clone this repo to your machine using :
 
 ```
-https://github.com/Carvales/Automatique.git
+https://github.com/Carvales/control-systems-visu-tools.git
 ```
 or download files.
 
-2) Select the tool
+2) Choose the tool
 
 3) Run on Matlab command window the name of the tool
+
 Example :
 
 ```
