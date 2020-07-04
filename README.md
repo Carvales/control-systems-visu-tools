@@ -1,17 +1,21 @@
 # Control Systems Visualisation Tools
 
 ### Description
-If you are a Control System student and you need to experience stuff in order to learn?
-If you are a Control System teacher and you want to include visual, practical and pedagogical elements in your course?
-This directory is for you!
-I propose matlab applications to visualize and understand systems:
+If you are a Control System student and you need to experience stuff in order to learn ...
+If you are a Control System teacher and you want to include visual, practical and pedagogical elements in your courses ...
+This directory is for you !
+I propose matlab applications to visualize and understand systems.
 
 ## Available tools:
 
 - Desgin and Visualisation of PID Regulator
+- Visualization and control of an Inverted Pendulum
+
+Note : Available tools are functional but can still evolve (add features, bug corrections, etc.)
 
 ## Tools planned:
-- Visualization and control of an Inverted Pendulum
+- Pole placement visualization
+- Visualization and control of a water tank
 
 ### Prerequisites
 Matlab R2016b or above to be able to run apps !
@@ -27,7 +31,9 @@ or download files.
 
 2) Select the tool
 
-3) Run on Matlab command window
+3) Run on Matlab command window the name of the tool
+Example :
+
 ```
-tool_name
+Inverted_pendulum
 ```
