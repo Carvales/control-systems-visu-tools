@@ -1,10 +1,11 @@
 # Control Systems Visualisation Tools
 
-### Description
-If you are a Control System student and you need to experience stuff in order to learn ...
-If you are a Control System teacher and you want to include visual, practical and pedagogical elements in your courses ...
-This directory is for you !
-I propose matlab applications to visualize and understand systems.
+## Description
+This repository is intended for :
+- Control System students that need to experience stuff in order to learn. 
+- Control System professors that want to include visual, practical and pedagogical elements in your lectures.
+
+Matlab applications are proposed to visualize and understand systems.
 
 ## Available tools:
 
@@ -21,17 +22,17 @@ Note : Available tools are functional but can still evolve (add features, bug co
 - Pole placement visualization
 - Visualisation and control of a water tank
 
-### Prerequisites
+## Prerequisites
 Matlab R2016b or above to be able to run apps !
 
-### How to use ?
+## How to use ?
 
 1) Clone this repo to your machine using :
 
 ```
 https://github.com/Carvales/control-systems-visu-tools.git
 ```
-or download files.
+or download zip files.
 
 2) Choose the tool
 
