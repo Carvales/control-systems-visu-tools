@@ -15,6 +15,7 @@ Matlab applications (designed with appdesigner) are proposed to visualize and un
 
 - Visualization and control of an Inverted Pendulum
   * Inverted_pendulum.mlapp
+@ Inspired by Steve Brunton courses on Inverted Pendulum Cart
 
 Note : Available tools are functional but can still evolve (add features, bug corrections, etc.)
 
