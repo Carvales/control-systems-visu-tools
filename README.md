@@ -2,10 +2,10 @@
 
 ## Description
 This repository is intended for :
-- Control System students that need to experience stuff in order to learn. 
-- Control System professors that want to include visual, practical and pedagogical elements in your lectures.
+- Control System students who need to experience stuff in order to learn. 
+- Control System professors who want to include visual, practical and pedagogical elements in their lectures.
 
-Matlab applications are proposed to visualize and understand systems.
+Matlab applications (designed with appdesigner) are proposed to visualize and understand systems.
 
 ## Available tools:
 
@@ -34,9 +34,9 @@ https://github.com/Carvales/control-systems-visu-tools.git
 ```
 or download zip files.
 
-2) Choose the tool
+2) Choose the tool in the according folder
 
-3) Run on Matlab command window the name of the tool
+3) Run in Matlab command window the name of the tool
 
 Example :
 
