@@ -21,12 +21,15 @@ MATLAB applications (designed with appdesigner) are proposed to visualize and un
 - PID Pole Placement Tool
   * Pole_placement.mlapp
 
+- Bode Diagram Construction
+    * bode_diagram_visu.mlapp
+
 Note : Available tools are functional but can still evolve (add features, bug corrections, etc.)
 
 ## Tools planned:
-- Path Planning : Attractive / Repulsive Field visualisation
+- MCC Control
+- Path Planning : Attractive / Repulsive Field
 - About MPC
-- MCC COntrol
 
 ## Prerequisites
 Matlab R2016b or above to be able to run apps !
