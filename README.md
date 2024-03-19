@@ -11,13 +11,13 @@ MATLAB applications (designed with appdesigner) are proposed to visualize and un
 
 - Design and Visualisation of PID Regulator
   * PID_visu.mlapp
-<img src="images/illustration_pid.png" alt="image" width="500" height="auto">
+<img src="/images/illustration_pid.png" alt="image" width="500" height="auto">
 
 <br/>
 
 - Visualization and control of an Inverted Pendulum
   * Inverted_pendulum.mlapp
-<img src="images/illustration_inverted_pendulum.png" alt="image" width="500" height="auto">
+<img src="/images/illustration_inverted_pendulum.png" alt="image" width="500" height="auto">
 
 @ Inspired by Steve Brunton courses on Inverted Pendulum Cart
 
@@ -25,13 +25,13 @@ MATLAB applications (designed with appdesigner) are proposed to visualize and un
 
 - PID Pole Placement Tool
   * Pole_placement.mlapp
-<img src="images/illustration_pid_pole_placement.png" alt="image" width="500" height="auto">
+<img src="/images/illustration_pid_pole_placement.png" alt="image" width="500" height="auto">
 
 <br/>
 
 - Bode Diagram Construction
     * bode_diagram_visu.mlapp
-<img src="images/illustration_bode.png" alt="image" width="500" height="auto">
+<img src="/images/illustration_bode.png" alt="image" width="500" height="auto">
 
 Note : Available tools are functional but can still evolve (add features, bug corrections, etc.)
 
